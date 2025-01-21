@@ -7,6 +7,9 @@ name = "stats_spec_architect"
 version = "0.1.0"
 description = "GUI for generating BIDS Stats Model spec json files."
 readme = "README.md"
+authors = [
+    { name = "Jeanette Mumford", email = "jeanette.mumford@gmail.com" } 
+]
 requires-python = ">=3.12"
 dependencies = [
     "jsonref>=1.1.0",
@@ -16,3 +19,23 @@ dependencies = [
 
 [project.scripts]
 make_spec = "stats_spec_architect.__main__:main"
+
+[tool.uv]
+dev-dependencies = [
+    "ipykernel>=6.29.5",
+    "pytest>=8.3.4",
+]
+
+
+[tool.setuptools.package-data]
+stats_spec_architect = ["assets/*.json", "assets/*.png"]
+
+
+[tool.ruff]
+extend-include = ["*.ipynb"]
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.ruff.lint]
+extend-select = ["E501", "W", "N", "R", "I"]

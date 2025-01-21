@@ -1,13 +1,14 @@
 from functools import partial
 
 import ttkbootstrap as tb
+from ttkbootstrap.constants import *
+
 from stats_spec_architect.DoubleScrolledFrame import DoubleScrolledFrame
 from stats_spec_architect.edges_setup import AddEdgeWidgets
 from stats_spec_architect.input_setup import CreateInputWidgets
 from stats_spec_architect.make_json import make_json
 from stats_spec_architect.nodes_transformations_setup_try_tabs import AddNode
 from stats_spec_architect.utils import CollapsingFrame, json_to_file, make_button
-from ttkbootstrap.constants import *
 
 
 def main():

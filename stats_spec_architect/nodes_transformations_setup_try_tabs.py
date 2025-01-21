@@ -1,8 +1,11 @@
 import collections
+import importlib.resources
 from functools import partial
 from tkinter import messagebox, ttk
 
 import ttkbootstrap as tb
+from ttkbootstrap.constants import *
+
 from stats_spec_architect.utils import (
     CollapsingFrame,
     CreateCheckbuttonRow,
@@ -11,7 +14,6 @@ from stats_spec_architect.utils import (
     create_label_entry,
     make_button,
 )
-from ttkbootstrap.constants import *
 
 label_width = 25
 
@@ -412,7 +414,12 @@ class AddTransformationWidgets:
     def get_xform_schema(self):
         import jsonref
 
-        with open("assets/pybids_xform_schema_JM.json") as f:
+        json_path = (
+            importlib.resources.files("stats_spec_architect")
+            / "assets"
+            / "pybids_xform_schema_JM.json"
+        )
+        with open(json_path) as f:
             xform_schema = jsonref.load(f)
         return xform_schema
 
