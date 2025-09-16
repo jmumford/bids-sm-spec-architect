@@ -5,14 +5,15 @@ from pathlib import Path
 from tkinter import filedialog
 
 import ttkbootstrap as tb
-from stats_spec_architect.make_json import make_json
 from ttkbootstrap.constants import *
 from ttkbootstrap.style import Bootstyle
+
+from stats_spec_architect.make_json import make_json
 
 label_width = 25
 
 
-IMG_PATH = Path(__file__).parent / "assets"
+IMG_PATH = Path(__file__).parent / 'assets'
 
 
 # Used to make each frame collapsable
@@ -26,11 +27,11 @@ class CollapsingFrame(tb.Frame):
 
         # widget images
         self.images = [
-            tb.PhotoImage(file=IMG_PATH / "icons8_double_up_24px.png"),
-            tb.PhotoImage(file=IMG_PATH / "icons8_double_right_24px.png"),
+            tb.PhotoImage(file=IMG_PATH / 'icons8_double_up_24px.png'),
+            tb.PhotoImage(file=IMG_PATH / 'icons8_double_right_24px.png'),
         ]
 
-    def add(self, child, title="", bootstyle=PRIMARY, **kwargs):
+    def add(self, child, title='', bootstyle=PRIMARY, **kwargs):
         """Add a child to the collapsible frame
         Parameters:
             child (Frame):
@@ -42,7 +43,7 @@ class CollapsingFrame(tb.Frame):
             **kwargs (Dict):
                 Other optional keyword arguments.
         """
-        if child.winfo_class() != "TFrame":
+        if child.winfo_class() != 'TFrame':
             return
 
         style_color = Bootstyle.ttkstyle_widget_color(bootstyle)
@@ -53,11 +54,11 @@ class CollapsingFrame(tb.Frame):
         header = tb.Label(
             master=frm,
             text=title,
-            font=("Helvetica", 22),
+            font=('Helvetica', 22),
             bootstyle=(style_color, INVERSE),
         )
-        if kwargs.get("textvariable"):
-            header.configure(textvariable=kwargs.get("textvariable"))
+        if kwargs.get('textvariable'):
+            header.configure(textvariable=kwargs.get('textvariable'))
         header.pack(side=LEFT, fill=BOTH, padx=10)
 
         # header toggle button
@@ -91,26 +92,29 @@ class CollapsingFrame(tb.Frame):
             child.btn.configure(image=self.images[0])
 
 
-def label_add_grid(parent_frame, label, row, column, label_width=None):
+def _label_add_grid(parent_frame, label, row, column, label_width=None):
     """
-    Makes label widget and adds it to row/column of grid within given frame
+    Makes label widget and adds it to row/column of grid within given frame.
+    Primarily used in create_label_entry and create_label_combobox
     """
     label_widget = tb.Label(master=parent_frame, text=label, width=label_width)
     label_widget.grid(row=row, column=column, padx=5)
 
 
-def entry_add_grid(parent_frame, row, column, width=25):
+def _entry_add_grid(parent_frame, row, column, width=25):
     """
     Makes entry widget and adds it to row/column of grid within given frame
+    Primarily used in create_label_entry
     """
     entry_widget = tb.Entry(master=parent_frame, width=width)
     entry_widget.grid(row=row, column=column, padx=5)
     return entry_widget
 
 
-def combobox_add_grid(parent_frame, combobox_values, row, column):
+def _combobox_add_grid(parent_frame, combobox_values, row, column):
     """
     Makes combobox widget and adds it to row/column of grid within given frame
+    Primarily used in create_label_combobox
     """
     entry_combo = tb.Combobox(master=parent_frame, values=combobox_values, width=24)
     entry_combo.grid(row=row, column=column, padx=5)
@@ -118,17 +122,17 @@ def combobox_add_grid(parent_frame, combobox_values, row, column):
 
 
 def create_label_entry(
-    parent_frame, label, frame_pack="top", entry_width=25, label_left=True
+    parent_frame, label, frame_pack='top', entry_width=25, label_left=True
 ):
     """
     creates a label widget with an entry widget
     label_left=True adds label to the left of entry
     label_left=False adds label above the entry
     """
-    if frame_pack == "top":
-        frame_pack_kwargs = {"fill": X, "expand": NO, "pady": 5}
-    elif frame_pack == "left":
-        frame_pack_kwargs = {"side": LEFT, "expand": NO, "pady": 5}
+    if frame_pack == 'top':
+        frame_pack_kwargs = {'fill': X, 'expand': NO, 'pady': 5}
+    elif frame_pack == 'left':
+        frame_pack_kwargs = {'side': LEFT, 'expand': NO, 'pady': 5}
 
     widget_pair_frame = tb.Frame(parent_frame)
     widget_pair_frame.pack(**frame_pack_kwargs)
@@ -137,17 +141,17 @@ def create_label_entry(
     if label_left:
         row_entry = 0
         column_entry = 1
-        label_add_grid(
+        _label_add_grid(
             widget_pair_frame, label, row_label, column_label, label_width=25
         )
-        entry_widget = entry_add_grid(
+        entry_widget = _entry_add_grid(
             widget_pair_frame, row_entry, column_entry, width=entry_width
         )
     else:
         row_entry = 1
         column_entry = 0
-        label_add_grid(widget_pair_frame, label, row_label, column_label)
-        entry_widget = entry_add_grid(
+        _label_add_grid(widget_pair_frame, label, row_label, column_label)
+        entry_widget = _entry_add_grid(
             widget_pair_frame, row_entry, column_entry, width=entry_width
         )
     return entry_widget
@@ -162,10 +166,10 @@ def create_label_combobox(
     label_left=False adds label above the combobox
     :param int default: Index of value in combobox_values to default to.
     """
-    if frame_pack == "top":
-        frame_pack_kwargs = {"fill": X, "expand": NO, "pady": 5}
-    elif frame_pack == "left":
-        frame_pack_kwargs = {"side": LEFT, "expand": NO, "pady": 5}
+    if frame_pack == 'top':
+        frame_pack_kwargs = {'fill': X, 'expand': NO, 'pady': 5}
+    elif frame_pack == 'left':
+        frame_pack_kwargs = {'side': LEFT, 'expand': NO, 'pady': 5}
     widget_pair_frame = tb.Frame(parent_frame)
     widget_pair_frame.pack(**frame_pack_kwargs)
     row_label = 0
@@ -173,17 +177,17 @@ def create_label_combobox(
     if label_left:
         row_combobox = 0
         column_combobox = 1
-        label_add_grid(
+        _label_add_grid(
             widget_pair_frame, label, row_label, column_label, label_width=25
         )
-        combobox_widget = combobox_add_grid(
+        combobox_widget = _combobox_add_grid(
             widget_pair_frame, combobox_values, row_combobox, column_combobox
         )
     else:
         row_combobox = 1
         column_combobox = 0
-        label_add_grid(widget_pair_frame, label, row_label, column_label)
-        combobox_widget = combobox_add_grid(
+        _label_add_grid(widget_pair_frame, label, row_label, column_label)
+        combobox_widget = _combobox_add_grid(
             widget_pair_frame, combobox_values, row_combobox, column_combobox
         )
     if default is not None:
@@ -198,11 +202,11 @@ def make_button(master_frame, label, command):
     cloneButton.pack(side=LEFT, padx=5, fill=X, expand=NO)
 
 
-def create_label(label, frame_name, frame_pack="top"):
-    if frame_pack == "top":
-        frame_pack_kwargs = {"fill": X, "expand": NO, "pady": 5}
-    elif frame_pack == "left":
-        frame_pack_kwargs = {"side": LEFT, "expand": NO, "pady": 5}
+def create_label(label, frame_name, frame_pack='top'):
+    if frame_pack == 'top':
+        frame_pack_kwargs = {'fill': X, 'expand': NO, 'pady': 5}
+    elif frame_pack == 'left':
+        frame_pack_kwargs = {'side': LEFT, 'expand': NO, 'pady': 5}
     form_field_container = tb.Frame(frame_name)
     form_field_container.pack(**frame_pack_kwargs)
 
@@ -229,7 +233,7 @@ class CreateCheckbuttonRow:
             self.is_selected[checkbutton_name] = tk.IntVar()
             checkbutton_dict[checkbutton_name] = tb.Checkbutton(
                 master=self.form_field_container,
-                bootstyle="primary",
+                bootstyle='primary',
                 text=checkbutton_name,
                 variable=self.is_selected[checkbutton_name],
                 onvalue=1,
@@ -248,6 +252,18 @@ class CreateCheckbuttonRow:
         return selections
 
 
+def json_to_file(top_level_data, node_widgets, edge_widgets):
+    to_save = make_json(top_level_data, node_widgets, edge_widgets)
+    name = top_level_data.widget_output['Name (req, str)'].get()
+    save_file(to_save, f'{name}.json')
+
+
+def save_file(to_save, filename):
+    file = filedialog.asksaveasfile(initialfile=filename)
+    file.write(to_save)
+    file.close()
+
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #### OLD (I don't think I use anything below this)
 
@@ -257,7 +273,7 @@ class CreateCheckbuttonRow:
 
 
 # Entry widget with label to left of it
-def create_form_entry(label, frame_name):
+def create_form_entry_not_used(label, frame_name):
     form_field_container = tb.Frame(frame_name)
     form_field_container.pack(fill=X, expand=NO, pady=5)
 
@@ -274,7 +290,7 @@ def create_form_entry(label, frame_name):
 
 
 # Combo box with label to left of it
-def create_combobox(label, combobox_values, frame_name):
+def create_combobox_not_used(label, combobox_values, frame_name):
     form_field_container = tb.Frame(frame_name)
     form_field_container.pack(fill=X, expand=NO, pady=5)
 
@@ -290,7 +306,9 @@ def create_combobox(label, combobox_values, frame_name):
 
 
 #  Creates a rows of checkbox widgets with a label next to it
-def create_checkbutton_row_with_select_all(label, checkbutton_names, frame_name):
+def create_checkbutton_row_with_select_all_not_used(
+    label, checkbutton_names, frame_name
+):
     form_field_container = tb.Frame(frame_name)
     form_field_container.pack(fill=X, expand=NO, pady=5)
 
@@ -303,20 +321,20 @@ def create_checkbutton_row_with_select_all(label, checkbutton_names, frame_name)
     checkbutton_dict = {}
     for checkbutton_name in checkbutton_names:
         is_selected = tk.IntVar()
-        if checkbutton_name != "Select all":
+        if checkbutton_name != 'Select all':
             checkbutton_dict[checkbutton_name] = tb.Checkbutton(
                 master=form_field_container,
-                bootstyle="primary",
+                bootstyle='primary',
                 text=checkbutton_name,
                 variable=is_selected,
                 onvalue=1,
                 offvalue=0,
             )
         #                                    command=checker)
-        if checkbutton_name == "Select all":
+        if checkbutton_name == 'Select all':
             checkbutton_dict[checkbutton_name] = tb.Checkbutton(
                 master=form_field_container,
-                bootstyle="primary",
+                bootstyle='primary',
                 text=checkbutton_name,
                 variable=is_selected,
                 onvalue=1,
@@ -332,37 +350,25 @@ def create_checkbutton_row_with_select_all(label, checkbutton_names, frame_name)
 # Checks input values (this will be replace later, it isn't currently used)
 # It is weird that this is called when the checkbuttons are checked.
 # I must need something to save out the checkbuttons that were selected?
-def checker(event=None):
+def checker_not_used(event=None):
     model_spec = collections.defaultdict(dict)
-    model_spec["Name"] = analysis_name.get()
-    model_spec["BIDSModelVersion"] = bids_version.get()
-    model_spec["Description"] = description.get()
-    checker_process_form_entry(subjects, model_spec, "Input", "subject")
-    model_spec["Input"]["task"] = checker_process_dictionary(task_out)
-    model_spec["Input"]["run"] = checker_process_dictionary(run_out)
-    model_spec["Input"]["session"] = checker_process_dictionary(session_out)
+    model_spec['Name'] = analysis_name.get()
+    model_spec['BIDSModelVersion'] = bids_version.get()
+    model_spec['Description'] = description.get()
+    checker_process_form_entry(subjects, model_spec, 'Input', 'subject')
+    model_spec['Input']['task'] = checker_process_dictionary(task_out)
+    model_spec['Input']['run'] = checker_process_dictionary(run_out)
+    model_spec['Input']['session'] = checker_process_dictionary(session_out)
     print(json.dumps(model_spec, indent=2))
 
 
 # Used in create_checkbutton_row.  Perhaps I should make that a Class object?
-def check_all_checkbuttons(check_button_set):
+def check_all_checkbuttons_not_used(check_button_set):
     for check_name, is_selected in check_button_set.items():
-        if check_name != "Select all":
-            if check_button_set["Select all"].instate(["selected"]) == True:
-                if check_button_set[check_name].instate(["selected"]) == False:
+        if check_name != 'Select all':
+            if check_button_set['Select all'].instate(['selected']) == True:
+                if check_button_set[check_name].instate(['selected']) == False:
                     check_button_set[check_name].invoke()
-            if check_button_set["Select all"].instate(["selected"]) == False:
-                if check_button_set[check_name].instate(["selected"]) == True:
+            if check_button_set['Select all'].instate(['selected']) == False:
+                if check_button_set[check_name].instate(['selected']) == True:
                     check_button_set[check_name].invoke()
-
-
-def json_to_file(top_level_data, node_widgets, edge_widgets):
-    to_save = make_json(top_level_data, node_widgets, edge_widgets)
-    name = top_level_data.widget_output["Name (req, str)"].get()
-    save_file(to_save, f"{name}.json")
-
-
-def save_file(to_save, filename):
-    file = filedialog.asksaveasfile(initialfile=filename)
-    file.write(to_save)
-    file.close()
