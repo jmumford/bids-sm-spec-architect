@@ -10,52 +10,6 @@ from typing import Any, Dict, List, Literal, Optional, Union
 from pydantic import BaseModel, Field, field_validator
 
 
-# Base types for transformation arguments
-class TransformationArgs:
-    """Base types for transformation arguments"""
-
-    # Common argument types
-    Input = List[str]
-    OutputStr = str
-    OutputArr = List[str]
-    OutputObj = Dict[str, Any]
-    Weights = List[float]
-    Wrt = List[str]
-    Demean = bool
-    Target = List[str]
-    InputAttr = Union[str, List[str]]
-    OutputAttr = Union[str, List[str]]
-    Prefix = List[str]
-    RefLevel = str
-    Replace = Dict[str, Any]
-    Attribute = str
-    Rescale = bool
-    Threshold = str
-    Binarize = bool
-    Above = bool
-    Signed = bool
-    ValueFloat = float
-    ValueInt = int
-    ValueStr = str
-    ValueBool = bool
-    Model = str
-    Derivative = bool
-    Dispersion = bool
-    FirDelays = List[float]
-    Constraint = str
-    Query = str
-    By = Union[str, List[str]]
-    Sep = str
-    ReplaceNa = Optional[str]
-    SamplingRate = float
-    Shift = float
-    Order = int
-    Mode = str
-    Constant = float
-    Difference = bool
-    Name = str
-
-
 # Individual transformation instruction models (only pybids transformations)
 class AndInstruction(BaseModel):
     """Logical AND operation"""
