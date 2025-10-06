@@ -2,6 +2,8 @@
 requires = ["setuptools", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools_scm]
+
 [project]
 name = "stats_spec_architect"
 version = "0.1.0"
@@ -12,9 +14,11 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "bsmschema",
     "jsonref>=1.1.0",
     "numpy>=2.1.1",
     "pybids>=0.18.1",
+    "pydantic>=2.11.9",
     "ttkbootstrap>=1.10.1",
 ]
 
@@ -27,6 +31,12 @@ dev-dependencies = [
     "pytest>=8.3.4",
 ]
 
+[tool.uv.sources]
+bsmschema = { path = "../stats-models/bsmschema" }
+
+
+[tool.setuptools]
+packages = ["stats_spec_architect"]
 
 [tool.setuptools.package-data]
 stats_spec_architect = ["assets/*.json", "assets/*.png"]

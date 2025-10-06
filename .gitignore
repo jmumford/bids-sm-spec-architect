@@ -6,6 +6,9 @@ __pycache__/
 # python scripts with junk in name
 *junk*.py
 
+# junk directory
+junk/
+
 # vscode settings
 .vscode/
 
