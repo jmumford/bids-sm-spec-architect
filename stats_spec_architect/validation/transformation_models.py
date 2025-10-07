@@ -16,7 +16,7 @@ class AndInstruction(BaseModel):
 
     Name: Literal['And'] = 'And'
     Input: List[str] = Field(..., description='Variables for AND operation')
-    Output: List[str] = Field(..., description='Output variable names')
+    Output: str = Field(..., description='Output variable name')
 
 
 class AssignInstruction(BaseModel):
@@ -183,7 +183,7 @@ class OrInstruction(BaseModel):
 
     Name: Literal['Or'] = 'Or'
     Input: List[str] = Field(..., description='Variables for OR operation')
-    Output: Optional[List[str]] = Field(None, description='Output variable names')
+    Output: str = Field(..., description='Output variable name')
 
 
 class OrthogonalizeInstruction(BaseModel):
@@ -246,8 +246,7 @@ class SelectInstruction(BaseModel):
     """Select specific variables to retain for subsequent analysis"""
 
     Name: Literal['Select'] = 'Select'
-    Input: List[str] = Field(..., description='Variables to select from')
-    Output: List[str] = Field(..., description='Selected variable names')
+    Input: List[str] = Field(..., description='Variables to retain')
 
 
 class SplitInstruction(BaseModel):
@@ -266,7 +265,7 @@ class SumInstruction(BaseModel):
 
     Name: Literal['Sum'] = 'Sum'
     Input: List[str] = Field(..., description='Variables to sum')
-    Output: Optional[List[str]] = Field(None, description='Output variable names')
+    Output: List[str] = Field(..., description='Output variable names')
     Weights: Optional[List[float]] = Field(
         None,
         description='Optional weights for each variable. If provided, length must match Input length',
@@ -333,7 +332,7 @@ class ResampleInstruction(BaseModel):
     Name: Literal['Resample'] = 'Resample'
     Input: List[str] = Field(..., description='Variables to resample')
     Output: Optional[List[str]] = Field(None, description='Output variable names')
-    SamplingRate: float = Field(..., description='Sampling frequency in hertz')
+    SamplingRate: Optional[float] = Field(10, description='Sampling frequency in hertz')
 
 
 # Union type for all transformation instructions (only pybids transformations)
