@@ -130,6 +130,14 @@ class AddTransformationWidgets:
         )
         combo.pack(side=LEFT, padx=5)
 
+        # Add initial tooltip
+        from stats_spec_architect.gui_v2.widget_factory import ToolTip
+
+        self.transformation_tooltip = ToolTip(
+            combo,
+            'Select a transformation type - hover after selection to see description',
+        )
+
         return combo
 
     def _on_transformation_selected(
@@ -153,6 +161,22 @@ class AddTransformationWidgets:
 
         # Get selected transformation
         transform_name = transformation_combo.get()
+
+        # Update combobox tooltip with transformation description
+        model_class = self.transformation_models.get(transform_name)
+        if model_class and model_class.__doc__:
+            # Update the tooltip text dynamically
+            if hasattr(transformation_combo, '_tooltip'):
+                # Remove old tooltip bindings
+                transformation_combo.unbind('<Enter>')
+                transformation_combo.unbind('<Leave>')
+
+            # Add new tooltip with transformation description
+            from stats_spec_architect.gui_v2.widget_factory import ToolTip
+
+            transformation_combo._tooltip = ToolTip(
+                transformation_combo, f'{transform_name}: {model_class.__doc__.strip()}'
+            )
 
         # Create widgets for this transformation
         widgets = self._create_transformation_widgets(container_frame, transform_name)

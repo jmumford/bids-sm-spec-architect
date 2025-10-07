@@ -4,12 +4,66 @@ Widget Factory - Auto-generate widgets from Pydantic models
 This module creates tkinter/ttkbootstrap widgets based on Pydantic model field definitions.
 """
 
+import tkinter as tk
 from typing import Any, Dict, List, Type, get_args, get_origin
 
 import ttkbootstrap as tb
 from pydantic import BaseModel
 from pydantic.fields import FieldInfo
 from ttkbootstrap.constants import *
+
+
+class ToolTip:
+    """
+    Simple tooltip that displays on hover.
+
+    Shows the description text in a small popup window when hovering over a widget.
+    """
+
+    def __init__(self, widget, text: str):
+        self.widget = widget
+        self.text = text
+        self.tooltip_window = None
+
+        # Bind hover events
+        widget.bind('<Enter>', self.show_tooltip)
+        widget.bind('<Leave>', self.hide_tooltip)
+
+    def show_tooltip(self, event=None):
+        """Display the tooltip."""
+        if self.tooltip_window or not self.text:
+            return
+
+        # Get widget position
+        x = self.widget.winfo_rootx() + 20
+        y = self.widget.winfo_rooty() + self.widget.winfo_height() + 5
+
+        # Create tooltip window
+        self.tooltip_window = tw = tk.Toplevel(self.widget)
+        tw.wm_overrideredirect(True)  # Remove window decorations
+        tw.wm_geometry(f'+{x}+{y}')
+
+        # Create label with description
+        label = tk.Label(
+            tw,
+            text=self.text,
+            justify=tk.LEFT,
+            background='#ffffe0',
+            foreground='#000000',
+            relief=tk.SOLID,
+            borderwidth=1,
+            font=('Helvetica', 10),
+            padx=8,
+            pady=6,
+            wraplength=400,  # Wrap long descriptions
+        )
+        label.pack()
+
+    def hide_tooltip(self, event=None):
+        """Hide the tooltip."""
+        if self.tooltip_window:
+            self.tooltip_window.destroy()
+            self.tooltip_window = None
 
 
 class WidgetFactory:
@@ -86,6 +140,17 @@ class WidgetFactory:
         """Check if field is optional (has default or is Optional)."""
         return not field_info.is_required()
 
+    def _add_tooltip(self, widget, description: str):
+        """
+        Add hover tooltip to a widget.
+
+        Args:
+            widget: The widget to add tooltip to
+            description: Description text to display
+        """
+        if description:
+            ToolTip(widget, description)
+
     def _make_label_text(self, field_name: str, field_info: FieldInfo, python_type):
         """Create label text with (req/opt, type) suffix."""
         req_opt = 'opt' if self._is_optional(field_info) else 'req'
@@ -117,6 +182,7 @@ class WidgetFactory:
         label_text: str,
         entry_width: int = 25,
         default_value: Any = None,
+        tooltip: str = None,
     ):
         """
         Create a label with entry widget.
@@ -126,6 +192,7 @@ class WidgetFactory:
             label_text: Label text
             entry_width: Width of entry widget
             default_value: Default value to pre-populate (will be converted to string)
+            tooltip: Optional tooltip text to display on hover
         """
         widget_pair_frame = tb.Frame(parent_frame)
         widget_pair_frame.pack(fill=X, expand=NO, pady=2)
@@ -142,6 +209,10 @@ class WidgetFactory:
         if default_value is not None:
             entry_widget.insert(0, str(default_value))
 
+        # Add tooltip if provided
+        if tooltip:
+            self._add_tooltip(entry_widget, tooltip)
+
         return entry_widget
 
     def _create_label_combobox(
@@ -150,6 +221,7 @@ class WidgetFactory:
         label_text: str,
         values: List[Any],
         default_value: Any = None,
+        tooltip: str = None,
     ):
         """
         Create a label with combobox widget.
@@ -159,6 +231,7 @@ class WidgetFactory:
             label_text: Label text
             values: List of values for combobox
             default_value: Default value to select (will find index automatically)
+            tooltip: Optional tooltip text to display on hover
         """
         widget_pair_frame = tb.Frame(parent_frame)
         widget_pair_frame.pack(fill=X, expand=NO, pady=2)
@@ -180,6 +253,10 @@ class WidgetFactory:
             except (ValueError, IndexError):
                 # Default not in list or invalid index - skip
                 pass
+
+        # Add tooltip if provided
+        if tooltip:
+            self._add_tooltip(combobox_widget, tooltip)
 
         return combobox_widget
 
@@ -211,6 +288,9 @@ class WidgetFactory:
         if hasattr(field_info, 'default') and field_info.default != PydanticUndefined:
             default_value = field_info.default
 
+        # Get description for tooltip
+        tooltip = field_info.description if hasattr(field_info, 'description') else None
+
         # Check for Literal (enum values) first
         literal_values = self._get_literal_values(annotation)
         if literal_values:
@@ -218,7 +298,11 @@ class WidgetFactory:
                 f'{field_name} ({("opt" if self._is_optional(field_info) else "req")})'
             )
             return self._create_label_combobox(
-                parent, label_text, list(literal_values), default_value=default_value
+                parent,
+                label_text,
+                list(literal_values),
+                default_value=default_value,
+                tooltip=tooltip,
             )
 
         # Check for validator-based enums (fields with @field_validator)
@@ -231,7 +315,11 @@ class WidgetFactory:
                 f'{field_name} ({("opt" if self._is_optional(field_info) else "req")})'
             )
             return self._create_label_combobox(
-                parent, label_text, enum_values, default_value=default_value
+                parent,
+                label_text,
+                enum_values,
+                default_value=default_value,
+                tooltip=tooltip,
             )
 
         # Get the actual Python type
@@ -243,7 +331,11 @@ class WidgetFactory:
         # Boolean -> Combobox with True/False
         if python_type == bool:
             return self._create_label_combobox(
-                parent, label_text, [True, False], default_value=default_value
+                parent,
+                label_text,
+                [True, False],
+                default_value=default_value,
+                tooltip=tooltip,
             )
 
         # Everything else -> Entry box
@@ -253,7 +345,9 @@ class WidgetFactory:
         if default_value is not None and python_type in (str, int, float):
             entry_default = default_value
 
-        return self._create_label_entry(parent, label_text, default_value=entry_default)
+        return self._create_label_entry(
+            parent, label_text, default_value=entry_default, tooltip=tooltip
+        )
 
     def create_widgets_from_model(
         self,
