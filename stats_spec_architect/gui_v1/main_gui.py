@@ -4,12 +4,12 @@ from functools import partial
 import ttkbootstrap as tb
 from ttkbootstrap.constants import *
 
-from stats_spec_architect.DoubleScrolledFrame import DoubleScrolledFrame
-from stats_spec_architect.edges_setup import AddEdgeWidgets
-from stats_spec_architect.input_setup import CreateInputWidgets
-from stats_spec_architect.make_json import make_json
-from stats_spec_architect.nodes_transformations_setup_try_tabs import AddNode
-from stats_spec_architect.utils import CollapsingFrame, json_to_file, make_button
+from stats_spec_architect.gui_v1.DoubleScrolledFrame import DoubleScrolledFrame
+from stats_spec_architect.gui_v1.edges_setup import AddEdgeWidgets
+from stats_spec_architect.gui_v1.input_setup import CreateInputWidgets
+from stats_spec_architect.gui_v1.make_json import make_json
+from stats_spec_architect.gui_v1.nodes_transformations_setup_try_tabs import AddNode
+from stats_spec_architect.gui_v1.utils import CollapsingFrame, json_to_file, make_button
 
 
 def launch_main_gui(layout):
@@ -64,7 +64,6 @@ def launch_main_gui(layout):
     )
 
     main_window.mainloop()
-
 
 
 def launch_main_gui_pydantic(layout):

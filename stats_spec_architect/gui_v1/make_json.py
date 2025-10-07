@@ -170,13 +170,13 @@ def format_data_inputs_nodes_edges(node_inputs_edge_object):
     """
     import tkinter
 
-    #    from stats_spec_architect.nodes_transformations_setup import (
+    #    from stats_spec_architect.gui_v1.nodes_transformations_setup import (
     #        AddTransformationWidgets,
     #    )
-    from stats_spec_architect.nodes_transformations_setup_try_tabs import (
+    from stats_spec_architect.gui_v1.nodes_transformations_setup_try_tabs import (
         AddTransformationWidgets,
     )
-    from stats_spec_architect.utils import CreateCheckbuttonRow
+    from stats_spec_architect.gui_v1.utils import CreateCheckbuttonRow
 
     model_spec = collections.defaultdict(dict)
     # The entries should either be tkinter objects or dictionaries

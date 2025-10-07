@@ -1,5 +1,5 @@
-from stats_spec_architect.layout_loading import LayoutLoadWindow
-from stats_spec_architect.main_gui import launch_main_gui
+from stats_spec_architect.gui_v1.layout_loading import LayoutLoadWindow
+from stats_spec_architect.gui_v1.main_gui import launch_main_gui
 
 
 def main():

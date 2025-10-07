@@ -3,7 +3,7 @@ import collections
 import ttkbootstrap as tb
 from ttkbootstrap.constants import *
 
-from stats_spec_architect.utils import create_label_combobox, create_label_entry
+from stats_spec_architect.gui_v1.utils import create_label_combobox, create_label_entry
 
 
 class CreateInputWidgets:

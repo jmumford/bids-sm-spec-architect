@@ -6,7 +6,7 @@ from tkinter import messagebox
 import ttkbootstrap as tb
 from ttkbootstrap.constants import *
 
-from stats_spec_architect.utils import (
+from stats_spec_architect.gui_v1.utils import (
     CollapsingFrame,
     CreateCheckbuttonRow,
     create_label,

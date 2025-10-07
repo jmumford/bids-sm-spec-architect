@@ -8,12 +8,12 @@ import ttkbootstrap as tb
 from ttkbootstrap.constants import *
 from ttkbootstrap.style import Bootstyle
 
-from stats_spec_architect.make_json import make_json
+from stats_spec_architect.gui_v1.make_json import make_json
 
 label_width = 25
 
 
-IMG_PATH = Path(__file__).parent / 'assets'
+IMG_PATH = Path(__file__).parent.parent / 'assets'
 
 
 # Used to make each frame collapsable
