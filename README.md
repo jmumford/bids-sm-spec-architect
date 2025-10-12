@@ -34,7 +34,7 @@ brew install uv
 ### 2. Clone and Install
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/bids-sm-spec-architect.git
+git clone https://github.com/jmumford/bids-sm-spec-architect.git
 cd bids-sm-spec-architect
 uv sync
 ```
