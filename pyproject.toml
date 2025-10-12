@@ -1,8 +1,6 @@
 [build-system]
-requires = ["setuptools", "setuptools-scm"]
-build-backend = "setuptools.build_meta"
-
-[tool.setuptools_scm]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "stats_spec_architect"
@@ -30,14 +28,6 @@ dev-dependencies = [
     "ipykernel>=6.29.5",
     "pytest>=8.3.4",
 ]
-
-
-[tool.setuptools]
-packages = ["stats_spec_architect"]
-
-[tool.setuptools.package-data]
-stats_spec_architect = ["assets/*.png"]
-
 
 [tool.ruff]
 extend-include = ["*.ipynb"]
