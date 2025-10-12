@@ -84,12 +84,17 @@ class CollapsingFrame(tb.Frame):
             child (Frame):
                 The child element to add or remove from grid manager.
         """
-        if child.winfo_viewable():
-            child.grid_remove()
-            child.btn.configure(image=self.images[1])
-        else:
-            child.grid()
-            child.btn.configure(image=self.images[0])
+        # Check if widget still exists (in case it was deleted)
+        try:
+            if child.winfo_exists() and child.winfo_viewable():
+                child.grid_remove()
+                child.btn.configure(image=self.images[1])
+            elif child.winfo_exists():
+                child.grid()
+                child.btn.configure(image=self.images[0])
+        except tk.TclError:
+            # Widget has been destroyed, ignore
+            pass
 
 
 def _label_add_grid(parent_frame, label, row, column, label_width=None):

@@ -7,7 +7,7 @@ widgets from Pydantic transformation models.
 
 import collections
 from functools import partial
-from tkinter import ttk
+from tkinter import messagebox, ttk
 
 import ttkbootstrap as tb
 from ttkbootstrap.constants import *
@@ -99,6 +99,9 @@ class AddTransformationWidgets:
             notebook_frame, text=f'Transformation {self.number + 1}'
         )
 
+        # Auto-select the newly added tab
+        self.transformations_notebook.select(self.number)
+
         self.number += 1
 
     def _create_transformer_selector(self):
@@ -109,13 +112,31 @@ class AddTransformationWidgets:
         label = tb.Label(master=widget_pair_frame, text='Transformer (req)', width=25)
         label.pack(side=LEFT, padx=5)
 
+        # Get Transformer values dynamically from bsmschema TransformerID Literal
+        transformer_values = self._get_transformer_values()
+
         combo = tb.Combobox(
-            master=widget_pair_frame, values=['pybids-transforms-v1'], width=24
+            master=widget_pair_frame, values=transformer_values, width=24
         )
         combo.pack(side=LEFT, padx=5)
-        combo.current(0)  # Default to first (only) option
+        if transformer_values:
+            combo.current(0)  # Default to first option
 
         return combo
+
+    def _get_transformer_values(self):
+        """Get valid Transformer values from bsmschema TransformerID Literal."""
+        try:
+            from typing import get_args
+
+            from bsmschema.models import TransformerID
+
+            # TransformerID is a Literal - extract its values
+            values = get_args(TransformerID)
+            return list(values) if values else ['pybids-transforms-v1']
+        except Exception:
+            # Fallback if extraction fails
+            return ['pybids-transforms-v1']
 
     def _create_transformation_selector(self, parent, transformation_values):
         """Create the transformation type selector."""
@@ -152,7 +173,7 @@ class AddTransformationWidgets:
             container_frame: Frame to add widgets to
             tab_index: Index for storing widget references
         """
-        # Delete existing widgets if they were already created for a different transformation
+        # Delete existing widgets if already created for a different transformation
         row_children = container_frame.winfo_children()
         num_children = len(row_children)
         if num_children > 1:  # Keep the selector, delete the rest
@@ -183,6 +204,9 @@ class AddTransformationWidgets:
 
         # Store widget references
         self.widget_output[f'Instructions_{tab_index}'] = widgets
+
+        # Add delete button after transformation widgets
+        self._add_delete_button(container_frame, tab_index)
 
     def _create_transformation_widgets(self, parent_frame, transform_name):
         """
@@ -218,3 +242,100 @@ class AddTransformationWidgets:
         output.update(field_widgets)
 
         return output
+
+    def _add_delete_button(self, parent_frame, tab_index):
+        """Add a delete button to a transformation tab."""
+        delete_frame = tb.Frame(parent_frame)
+        delete_frame.pack(side='top', anchor='e', padx=10, pady=10)
+
+        delete_button = tb.Button(
+            delete_frame,
+            text=f'Delete Transformation {tab_index + 1}',
+            command=partial(self.delete_transformation, tab_index),
+            bootstyle='warning',
+        )
+        delete_button.pack()
+
+    def delete_transformation(self, tab_index):
+        """
+        Delete a transformation and renumber all subsequent transformations.
+
+        Args:
+            tab_index: Index of the transformation to delete (0-based)
+        """
+        # Confirm deletion
+        result = messagebox.askyesno(
+            'Delete Transformation',
+            f'Are you sure you want to delete Transformation {tab_index + 1}?\n\n'
+            'All transformations after this will be renumbered.',
+        )
+
+        if not result:
+            return
+
+        # Rebuild widget_output with renumbered Instructions
+        # We need to rebuild to preserve insertion order in the dict
+        new_widget_output = collections.defaultdict(dict)
+
+        # Copy non-Instructions items first
+        for key, value in self.widget_output.items():
+            if not key.startswith('Instructions_'):
+                new_widget_output[key] = value
+
+        # Renumber and add Instructions items
+        instruction_counter = 0
+        for i in range(self.number):
+            if i == tab_index:
+                # Skip the deleted transformation
+                continue
+            old_key = f'Instructions_{i}'
+            if old_key in self.widget_output:
+                new_key = f'Instructions_{instruction_counter}'
+                new_widget_output[new_key] = self.widget_output[old_key]
+                instruction_counter += 1
+
+        # Replace the old widget_output
+        self.widget_output = new_widget_output
+
+        # Remove the tab from the notebook
+        self.transformations_notebook.forget(tab_index)
+
+        # Update all remaining tab titles
+        for i in range(self.transformations_notebook.index('end')):
+            self.transformations_notebook.tab(i, text=f'Transformation {i + 1}')
+
+        # Update delete button labels in remaining tabs
+        self._update_delete_button_labels()
+
+        # Decrement counter
+        self.number -= 1
+
+        # If no transformations left, remove the notebook and Transformer selector
+        if self.number == 0:
+            self.transformations_notebook.destroy()
+            # Remove Transformer selector
+            if 'Transformer (req)' in self.widget_output:
+                widget = self.widget_output['Transformer (req)']
+                if hasattr(widget, 'master'):
+                    widget.master.destroy()
+                del self.widget_output['Transformer (req)']
+
+    def _update_delete_button_labels(self):
+        """Update all delete button labels after renumbering."""
+        for i in range(self.transformations_notebook.index('end')):
+            # Get the tab frame
+            tab_frame = self.transformations_notebook.nametowidget(
+                self.transformations_notebook.tabs()[i]
+            )
+            # Find the delete button and update its text
+            for child in tab_frame.winfo_children():
+                if isinstance(child, tb.Frame):
+                    for button in child.winfo_children():
+                        if isinstance(button, tb.Button) and button.cget(
+                            'text'
+                        ).startswith('Delete'):
+                            button.configure(text=f'Delete Transformation {i + 1}')
+                            # Update command to use correct index
+                            button.configure(
+                                command=partial(self.delete_transformation, i)
+                            )

@@ -20,14 +20,28 @@ class ToolTip:
     Shows the description text in a small popup window when hovering over a widget.
     """
 
-    def __init__(self, widget, text: str):
+    def __init__(self, widget, text: str, delay: int = 300):
+        """
+        Initialize tooltip.
+
+        Args:
+            widget: Widget to attach tooltip to
+            text: Tooltip text to display
+            delay: Delay in milliseconds before tooltip appears (default: 300ms)
+        """
         self.widget = widget
         self.text = text
         self.tooltip_window = None
+        self.delay = delay
+        self.scheduled = None
 
         # Bind hover events
-        widget.bind('<Enter>', self.show_tooltip)
+        widget.bind('<Enter>', self.schedule_tooltip)
         widget.bind('<Leave>', self.hide_tooltip)
+
+    def schedule_tooltip(self, event=None):
+        """Schedule tooltip to appear after delay."""
+        self.scheduled = self.widget.after(self.delay, self.show_tooltip)
 
     def show_tooltip(self, event=None):
         """Display the tooltip."""
@@ -60,7 +74,13 @@ class ToolTip:
         label.pack()
 
     def hide_tooltip(self, event=None):
-        """Hide the tooltip."""
+        """Hide the tooltip and cancel any scheduled display."""
+        # Cancel scheduled tooltip if it hasn't shown yet
+        if self.scheduled:
+            self.widget.after_cancel(self.scheduled)
+            self.scheduled = None
+
+        # Hide tooltip if it's visible
         if self.tooltip_window:
             self.tooltip_window.destroy()
             self.tooltip_window = None
