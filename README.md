@@ -170,7 +170,7 @@ If you use this tool in your research, please cite:
 
 ```
 Mumford, J. (2025). BIDS Stats Model Architect. 
-https://github.com/YOUR_USERNAME/bids-sm-spec-architect
+https://github.com/jmumford/bids-sm-spec-architect
 ```
 
 ---
