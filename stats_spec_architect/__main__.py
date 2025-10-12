@@ -1,12 +1,9 @@
-from stats_spec_architect.gui_v1.layout_loading import LayoutLoadWindow
-from stats_spec_architect.gui_v1.main_gui import launch_main_gui
+from stats_spec_architect.gui.main_gui import launch_main_gui
 
 
 def main():
-    initial_window = LayoutLoadWindow(
-        on_data_loaded=launch_main_gui, themename='superhero', minsize=(300, 150)
-    )
-    initial_window.mainloop()
+    """Launch the BIDS Stats Model Architect GUI."""
+    launch_main_gui()
 
 
 if __name__ == '__main__':

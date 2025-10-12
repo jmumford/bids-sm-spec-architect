@@ -11,7 +11,7 @@ import ttkbootstrap as tb
 from pydantic.fields import FieldInfo
 from ttkbootstrap.constants import *
 
-from stats_spec_architect.gui_v3.widget_factory import ToolTip
+from stats_spec_architect.gui.widget_factory import ToolTip
 
 
 def create_field_label(

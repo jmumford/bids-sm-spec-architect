@@ -12,9 +12,9 @@ import ttkbootstrap as tb
 from bsmschema.models import Contrast, DummyContrasts, Model, Node
 from ttkbootstrap.constants import *
 
-from stats_spec_architect.gui_v3.bsmschema_introspector import BSMSchemaIntrospector
-from stats_spec_architect.gui_v3.transformation_widgets import AddTransformationWidgets
-from stats_spec_architect.gui_v3.widget_factory import ToolTip, WidgetFactory
+from stats_spec_architect.gui.bsmschema_introspector import BSMSchemaIntrospector
+from stats_spec_architect.gui.transformation_widgets import AddTransformationWidgets
+from stats_spec_architect.gui.widget_factory import ToolTip, WidgetFactory
 
 
 class AddNode:
@@ -56,7 +56,7 @@ class AddNode:
         self.dummy_contrast_frames = {}  # Stores the dummy contrast frames
 
         # Import CollapsingFrame
-        from stats_spec_architect.gui_v3.utils import CollapsingFrame
+        from stats_spec_architect.gui.utils import CollapsingFrame
 
         self.node_specific_cf = CollapsingFrame(self.master, padding=10)
         self.node_specific_cf.pack(fill=BOTH)
@@ -339,7 +339,7 @@ class AddNode:
         checkboxes for the most common: run, session, subject, contrast.
         """
         # Import the checkbox row widget
-        from stats_spec_architect.gui_v3.utils import CreateCheckbuttonRow
+        from stats_spec_architect.gui.utils import CreateCheckbuttonRow
 
         # Standard GroupBy options (from BIDS spec - these are reserved strings)
         groupby_options = ['run', 'session', 'subject', 'contrast']

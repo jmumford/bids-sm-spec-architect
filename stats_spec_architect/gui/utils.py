@@ -1,8 +1,8 @@
 """
-GUI v2 Utilities
+GUI Utilities
 
 Reusable GUI components for the Pydantic-based GUI.
-Copied from v1 to make gui_v3 independent.
+Contains CollapsingFrame and CreateCheckbuttonRow for building the interface.
 """
 
 import tkinter as tk

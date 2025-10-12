@@ -14,7 +14,7 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
-    "bsmschema",
+    "bsmschema>=0.1.1",
     "jsonref>=1.1.0",
     "numpy>=2.1.1",
     "pybids>=0.18.1",
@@ -23,7 +23,7 @@ dependencies = [
 ]
 
 [project.scripts]
-make_spec = "stats_spec_architect.__main__:main"
+build_model = "stats_spec_architect.__main__:main"
 
 [tool.uv]
 dev-dependencies = [
@@ -31,15 +31,12 @@ dev-dependencies = [
     "pytest>=8.3.4",
 ]
 
-[tool.uv.sources]
-bsmschema = { path = "../stats-models/bsmschema" }
-
 
 [tool.setuptools]
 packages = ["stats_spec_architect"]
 
 [tool.setuptools.package-data]
-stats_spec_architect = ["assets/*.json", "assets/*.png"]
+stats_spec_architect = ["assets/*.png"]
 
 
 [tool.ruff]

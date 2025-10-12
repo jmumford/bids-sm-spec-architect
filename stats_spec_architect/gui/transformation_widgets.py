@@ -12,8 +12,8 @@ from tkinter import messagebox
 import ttkbootstrap as tb
 from ttkbootstrap.constants import *
 
-from stats_spec_architect.gui_v3.model_discovery import discover_transformation_models
-from stats_spec_architect.gui_v3.widget_factory import WidgetFactory
+from stats_spec_architect.gui.model_discovery import discover_transformation_models
+from stats_spec_architect.gui.widget_factory import WidgetFactory
 from stats_spec_architect.validation.transformation_models import (
     get_available_transformations,
 )
@@ -116,7 +116,7 @@ class AddTransformationWidgets:
         # Update tooltip for the combobox
         model_class = self.transformation_models.get(transform_name)
         if model_class and model_class.__doc__:
-            from stats_spec_architect.gui_v3.widget_factory import ToolTip
+            from stats_spec_architect.gui.widget_factory import ToolTip
 
             transformation_combo._tooltip = ToolTip(
                 transformation_combo, f'{transform_name}: {model_class.__doc__.strip()}'
@@ -137,7 +137,7 @@ class AddTransformationWidgets:
 
     def _create_transformation_section(self, index, initial_title=None):
         """Create a collapsible section for a transformation."""
-        from stats_spec_architect.gui_v3.utils import CollapsingFrame
+        from stats_spec_architect.gui.utils import CollapsingFrame
 
         # Create collapsing frame if not exists
         if not hasattr(self, 'transformation_cf'):
@@ -243,7 +243,7 @@ class AddTransformationWidgets:
         combo.pack(side=LEFT, padx=5)
 
         # Add initial tooltip
-        from stats_spec_architect.gui_v3.widget_factory import ToolTip
+        from stats_spec_architect.gui.widget_factory import ToolTip
 
         self.transformation_tooltip = ToolTip(
             combo,
@@ -287,7 +287,7 @@ class AddTransformationWidgets:
                 transformation_combo.unbind('<Leave>')
 
             # Add new tooltip with transformation description
-            from stats_spec_architect.gui_v3.widget_factory import ToolTip
+            from stats_spec_architect.gui.widget_factory import ToolTip
 
             transformation_combo._tooltip = ToolTip(
                 transformation_combo, f'{transform_name}: {model_class.__doc__.strip()}'

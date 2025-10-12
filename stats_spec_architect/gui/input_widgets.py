@@ -9,8 +9,8 @@ import ttkbootstrap as tb
 from bsmschema.models import BIDSStatsModel
 from ttkbootstrap.constants import *
 
-from stats_spec_architect.gui_v3.bsmschema_introspector import BSMSchemaIntrospector
-from stats_spec_architect.gui_v3.widget_factory import ToolTip, WidgetFactory
+from stats_spec_architect.gui.bsmschema_introspector import BSMSchemaIntrospector
+from stats_spec_architect.gui.widget_factory import ToolTip, WidgetFactory
 
 
 class CreateInputWidgets:

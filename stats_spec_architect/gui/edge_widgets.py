@@ -11,8 +11,8 @@ import ttkbootstrap as tb
 from bsmschema.models import Edge
 from ttkbootstrap.constants import BOTH, LEFT, NO, SECONDARY, X
 
-from stats_spec_architect.gui_v3.bsmschema_introspector import BSMSchemaIntrospector
-from stats_spec_architect.gui_v3.widget_factory import ToolTip
+from stats_spec_architect.gui.bsmschema_introspector import BSMSchemaIntrospector
+from stats_spec_architect.gui.widget_factory import ToolTip
 
 
 class AddEdge:
@@ -59,7 +59,7 @@ class AddEdge:
         add_button.pack(side=LEFT, padx=5, fill=X, expand=NO)
 
         # Import CollapsingFrame
-        from stats_spec_architect.gui_v3.utils import CollapsingFrame
+        from stats_spec_architect.gui.utils import CollapsingFrame
 
         self.edge_specific_cf = CollapsingFrame(self.master, padding=10)
         self.edge_specific_cf.pack(fill=BOTH)

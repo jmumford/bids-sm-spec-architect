@@ -1,7 +1,8 @@
 """
 Main GUI Window - Pydantic-based BIDS Stats Model Architect
 
-Integrates all v2 components (Input, Nodes, Edges) into a single GUI.
+Integrates all components (Input, Nodes, Edges) into a single GUI using
+dynamic Pydantic-based widget generation.
 """
 
 from functools import partial
@@ -9,16 +10,16 @@ from functools import partial
 import ttkbootstrap as tb
 from ttkbootstrap.constants import BOTH, YES
 
-from stats_spec_architect.gui_v3.edge_widgets import AddEdge
-from stats_spec_architect.gui_v3.input_widgets import CreateInputWidgets
-from stats_spec_architect.gui_v3.node_widgets import AddNode
-from stats_spec_architect.gui_v3.scrolled_frame import VerticalScrolledFrame
-from stats_spec_architect.gui_v3.utils import CollapsingFrame
+from stats_spec_architect.gui.edge_widgets import AddEdge
+from stats_spec_architect.gui.input_widgets import CreateInputWidgets
+from stats_spec_architect.gui.node_widgets import AddNode
+from stats_spec_architect.gui.scrolled_frame import VerticalScrolledFrame
+from stats_spec_architect.gui.utils import CollapsingFrame
 
 
-def launch_main_gui_v3(layout=None):
+def launch_main_gui(layout=None):
     """
-    Launch the main GUI (v2 - Pydantic-based).
+    Launch the main GUI (Pydantic-based, dynamic widget generation).
 
     Args:
         layout: Optional BIDSLayout object (for future integration)
@@ -28,7 +29,7 @@ def launch_main_gui_v3(layout=None):
 
     # Create main window with superhero theme
     main_window = tb.Window(themename='superhero')
-    main_window.title('BIDS Stats Model Architect (v3 - Accordion Transformations)')
+    main_window.title('BIDS Stats Model Architect')
     main_window.geometry('1400x950')
     main_window.minsize(1400, 600)  # Prevent width from collapsing
     main_window.protocol('WM_DELETE_WINDOW', main_window.quit)
@@ -105,7 +106,7 @@ def launch_main_gui_v3(layout=None):
 
 def _show_json(input_widgets, node_widgets, edge_widgets):
     """Display the generated JSON in a popup window."""
-    from stats_spec_architect.gui_v3.json_export import (
+    from stats_spec_architect.gui.json_export import (
         export_to_json,
         show_json_in_window,
     )
@@ -124,7 +125,7 @@ def _save_json(input_widgets, node_widgets, edge_widgets):
     """Save the JSON to a file."""
     from tkinter import filedialog, messagebox
 
-    from stats_spec_architect.gui_v3.json_export import export_to_json
+    from stats_spec_architect.gui.json_export import export_to_json
 
     # Export and validate
     json_string, validation_result = export_to_json(
@@ -163,7 +164,7 @@ def _save_json(input_widgets, node_widgets, edge_widgets):
 
 def _load_json(input_widgets, node_widgets, edge_widgets):
     """Load JSON from a file into the GUI."""
-    from stats_spec_architect.gui_v3.json_import import load_json_to_gui
+    from stats_spec_architect.gui.json_import import load_json_to_gui
 
     load_json_to_gui(input_widgets, node_widgets, edge_widgets)
 
@@ -172,7 +173,7 @@ def _validate_model(input_widgets, node_widgets, edge_widgets):
     """Validate the current model using enhanced_validator."""
     from tkinter import messagebox
 
-    from stats_spec_architect.gui_v3.json_export import export_to_json
+    from stats_spec_architect.gui.json_export import export_to_json
 
     # Export and validate
     json_string, validation_result = export_to_json(
@@ -192,7 +193,7 @@ def _validate_model(input_widgets, node_widgets, edge_widgets):
 def main():
     """Launch the GUI for testing (without BIDSLayout)."""
     # Launch main GUI directly (tb.Window is a root window)
-    launch_main_gui_v3(layout=None)
+    launch_main_gui(layout=None)
 
 
 if __name__ == '__main__':

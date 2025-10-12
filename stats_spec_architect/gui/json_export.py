@@ -1,5 +1,5 @@
 """
-JSON Export for GUI v3
+JSON Export for GUI
 
 Converts GUI widget state to BIDS Stats Model JSON and validates it.
 """
@@ -11,7 +11,7 @@ from typing import get_args, get_origin
 
 from bsmschema.models import Contrast, DummyContrasts, Model
 
-from stats_spec_architect.gui_v3.widget_helpers import extract_field_name_from_key
+from stats_spec_architect.gui.widget_helpers import extract_field_name_from_key
 
 
 # Fields that should be parsed as lists (based on Pydantic models)
@@ -297,7 +297,7 @@ def _process_transformation_field(field_name, widget, transform_name):
 
     # Look up the field type from the transformation model
     try:
-        from stats_spec_architect.gui_v3.model_discovery import (
+        from stats_spec_architect.gui.model_discovery import (
             discover_transformation_models,
         )
 

@@ -108,7 +108,7 @@ class WidgetFactory:
         # Auto-detect validator enums from Pydantic models (if provided)
         self.validator_enums = {}
         if transformation_models:
-            from stats_spec_architect.gui_v3.validator_introspector import (
+            from stats_spec_architect.gui.validator_introspector import (
                 ValidatorIntrospector,
             )
 

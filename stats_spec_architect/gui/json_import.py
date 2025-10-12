@@ -1,5 +1,5 @@
 """
-JSON Import for GUI v2
+JSON Import for GUI
 
 Loads BIDS Stats Model JSON and populates GUI widgets.
 """
@@ -290,7 +290,7 @@ def _add_and_populate_transformation(instruction_data, trans_widget):
     if not transform_name:
         return
 
-    # Add transformation with type pre-selected (v3 uses add_transformation_with_type)
+    # Add transformation with type pre-selected
     trans_widget.add_transformation_with_type(transform_name)
 
     # Get the tab index (just added, so it's number - 1)
